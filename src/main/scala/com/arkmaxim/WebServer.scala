@@ -20,7 +20,7 @@ object WebServer extends WebHookApi{
     implicit val executionContext = system.dispatcher
 
     val route =
-      pathPrefix("v1") {
+      pathPrefix("facebook") {
         webhook
       }
 
