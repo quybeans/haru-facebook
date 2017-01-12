@@ -4,6 +4,14 @@ version := "1.0"
 
 scalaVersion := "2.11.6"
 
+val circeVersion = "0.6.1"
+
+libraryDependencies ++= Seq(
+  "io.circe" %% "circe-core",
+  "io.circe" %% "circe-generic",
+  "io.circe" %% "circe-parser"
+).map(_ % circeVersion)
+
 libraryDependencies ++= Seq(
   // Change this to another test framework if you prefer
   "org.scalatest" %% "scalatest" % "2.1.6" % "test",
