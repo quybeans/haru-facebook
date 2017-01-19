@@ -1,34 +1,37 @@
 package com.arkmaxim.api
 
-import cats.syntax.either._
 import akka.http.scaladsl.server.Directives._
-import io.circe._, io.circe.parser._
+import cats.syntax.either._
+import com.arkmaxim.response.CommentResponse
+import io.circe.Json
+import io.circe.optics.JsonPath.root
+import io.circe.parser._
 
-/**
-  * Created by quybeans on 1/11/17.
-  */
 trait WebHookApi {
 
   final val haru_secret = "HaruProjectABCXYZ"
 
+  val _entries= root.entry.string
+
   val webhook = {
     (path("webhooks") & get) {
-      parameter("hub.verify_token", "hub.challenge") { (token: String, challenge: String) => {
-        if (haru_secret == token)
+      parameter("hub.verify_token", "hub.challenge") { (token: String, challenge: String) =>
+        if (haru_secret == token) {
           complete(challenge)
-        else complete("Something happend ...")
-      }
+        } else {
+          complete("Something happend ...")
+        }
       }
     } ~
       (path("webhooks") & post) {
-        entity(as[String]) { jsonResponse => {
+        entity(as[String]) { jsonResponse =>
           println(jsonResponse)
-          val change : Json = parse(jsonResponse).getOrElse(Json.Null)
-          val cursor : HCursor = change.hcursor
-          val root:String = cursor.downField("changes").as[List[String]].toString
-          println(root)
+         val json = parse(jsonResponse).getOrElse(Json.Null)
+//          println(json.toString())
+//          println(root.`object`.string.getOption(json))
+//          println(root.entry.each.id.string.getAll(json))
+          println(CommentResponse.decodeReponse(json.hcursor))
           complete("OK")
-        }
         }
       }
   }

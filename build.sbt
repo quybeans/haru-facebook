@@ -6,10 +6,13 @@ scalaVersion := "2.11.6"
 
 val circeVersion = "0.6.1"
 
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+
 libraryDependencies ++= Seq(
   "io.circe" %% "circe-core",
   "io.circe" %% "circe-generic",
-  "io.circe" %% "circe-parser"
+  "io.circe" %% "circe-parser",
+  "io.circe" %% "circe-optics"
 ).map(_ % circeVersion)
 
 libraryDependencies ++= Seq(
